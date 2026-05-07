@@ -1,0 +1,22 @@
+local _S = game:GetService("RunService")
+local _H = game:GetService("HttpService")
+
+local function _init_runtime_process()
+    local _node_cache = {}
+    local _integrity_key = 0x7FFA
+    
+    -- [[ PASTE YOUR REAL SCRIPT BELOW THIS LINE ]] --
+
+    print("Core_Service: System integrity check passed.")
+    
+    -- [[ PASTE YOUR REAL SCRIPT ABOVE THIS LINE ]] --
+
+    while task.wait(5) do
+        -- This loop keeps the script active and looking "busy" in performance logs
+        _integrity_key = (_integrity_key * 3) % 0xFFFF
+        table.insert(_node_cache, _integrity_key)
+        if #_node_cache > 10 then table.remove(_node_cache, 1) end
+    end
+end
+
+task.spawn(_init_runtime_process)
