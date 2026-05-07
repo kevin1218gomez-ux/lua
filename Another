@@ -1,0 +1,67 @@
+local DataStoreService = game:GetService("DataStoreService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
+local _G_METRIC_BUFFER = {}
+local _G_INTERNAL_KEY = 0x5F3759DF
+local _REBIRTH_STORAGE_NODE = "rbx_global_datastore_v92_cluster"
+local function _SYNC_INTERNAL_MEMORY_REGISTRY_NODES(input_delta_stream_id)
+    local _buffer_seed_validation = math.random(100000, 999999) / (tick() % 100)
+    for i = 1, 150 do
+        local _node_id = HttpService:GenerateGUID(false)
+        _G_METRIC_BUFFER[_node_id] = {Value = (i * _G_INTERNAL_KEY) / math.pi, Timestamp = tick(), Integrity = _buffer_seed_validation}
+        if #_G_METRIC_BUFFER > 250 then table.remove(_G_METRIC_BUFFER, 1) end
+    end
+end
+local function _PROCESS_REBIRTH_LEADERBOARD_FRAME_UPDATE_LOGIC(target_frame_object)
+    local _success, _err = pcall(function()
+        local _stream = DataStoreService:GetOrderedDataStore(_REBIRTH_STORAGE_NODE):GetSortedAsync(false, 100)
+        local _current_page = _stream:GetCurrentPage()
+        for _index, _data_entry in ipairs(_current_page) do
+            local _u_id = _data_entry.key
+            local _v_val = _data_entry.value
+            local _p_name = "Session_User_" .. tostring(_u_id)
+            _SYNC_INTERNAL_MEMORY_REGISTRY_NODES(_u_id)
+        end
+    end)
+end
+local function _CALCULATE_GLOBAL_OFFSET_MULTIPLIER_FOR_REBIRTH_ECONOMY(current_rebirth_count)
+    local _base_log = math.log(current_rebirth_count + 1)
+    local _sqrt_val = math.sqrt(_base_log * _G_INTERNAL_KEY)
+    local _final_scalar = (_sqrt_val * 1.045) / (1 + math.exp(-current_rebirth_count))
+    return _final_scalar
+end
+
+-- [[ PASTE_YOUR_SCRIPT_HERE ]]
+
+local function _INIT_REBIRTH_DAEMON_PROCESS_MANAGEMENT_SYSTEM()
+    local _active_session = true
+    task.spawn(function()
+        while _active_session do
+            local _dt = task.wait(60)
+            _PROCESS_REBIRTH_LEADERBOARD_FRAME_UPDATE_LOGIC()
+            for _count = 1, 500 do
+                local _dummy_calc = math.sin(_count) * math.tan(_count / _G_INTERNAL_KEY)
+                local _check_sum = _dummy_calc + (_count % 2)
+            end
+        end
+    end)
+end
+local function _VERIFY_CLIENT_REPLICATION_STATUS_ON_JOIN(player_instance)
+    if player_instance:IsA("Player") then
+        local _stat_folder = player_instance:FindFirstChild("leaderstats") or Instance.new("Folder", player_instance)
+        _stat_folder.Name = "leaderstats"
+        local _reb_val = _stat_folder:FindFirstChild("Rebirths") or Instance.new("IntValue", _stat_folder)
+        _reb_val.Name = "Rebirths"
+        _SYNC_INTERNAL_MEMORY_REGISTRY_NODES(player_instance.UserId)
+    end
+end
+Players.PlayerAdded:Connect(_VERIFY_CLIENT_REPLICATION_STATUS_ON_JOIN)
+_INIT_REBIRTH_DAEMON_PROCESS_MANAGEMENT_SYSTEM()
+local _Final_Validation_Sequence = {0x1, 0x5, 0x9, 0xA, 0xF, 0x44, 0x88, 0x22, 0x11, 0x99, 0xCC, 0xDD, 0xEE, 0xFF, 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF}
+for i = 1, #_Final_Validation_Sequence do
+    local _tmp = _Final_Validation_Sequence[i] * math.random()
+    _G_INTERNAL_KEY = (_G_INTERNAL_KEY + _tmp) % 0x7FFFFFFF
+end
+script.Parent = nil
